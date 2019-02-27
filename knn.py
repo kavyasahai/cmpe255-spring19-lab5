@@ -1,8 +1,10 @@
 from collections import Counter
+import numpy as np
 from linear_algebra import distance
 from stats import mean
 import math, random
 import matplotlib.pyplot as plt
+import data
 
 
 def majority_vote(labels):
@@ -25,7 +27,6 @@ def knn_classify(k, labeled_points, new_point):
     # order the labeled points from nearest to farthest
     by_distance = sorted(labeled_points,
                          key=lambda point_label: distance(point_label[0], new_point))
-
     # find the labels for the k closest
     k_nearest_labels = [label for _, label in by_distance[:k]]
 
@@ -41,10 +42,19 @@ def predict_preferred_language_by_city(k_values, cities):
     Finally, print number of correct for each k value using this:
     print(k, "neighbor[s]:", num_correct, "correct out of", len(cities))
     """
+    for k in k_values:
+        num_correct=0
+        for city in cities:
+            pred=knn_classify(k,cities,city[0])
+            if(pred==city[1]):
+                num_correct+=1
+        print(k, "neighbor[s]:", num_correct, "correct out of", len(cities))
+
 
 
 if __name__ == "__main__":
     k_values = [1, 3, 5, 7]
     # TODO
+
     # Import cities from data.py and pass it into predict_preferred_language_by_city(x, y).
-    predict_preferred_language_by_city(k_values, [])
+    predict_preferred_language_by_city(k_values, data.cities)
